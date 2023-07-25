@@ -1,9 +1,9 @@
 /*********************************************************************************
 
-WEB322 – Assignment 02
+WEB322 – Assignment 04
 I declare that this assignment is my own work in accordance with Seneca  Academic Policy.  No part *  of this assignment has been copied manually or electronically from any other source (including 3rd party web sites) or distributed to other students.
 
-*  Name: Gulshanpreet singh Student ID: 168457216 Date: 5th june 2023
+*  Name: Gulshanpreet singh Student ID: 168457216 Date: 24th July, 2023
 *
 *  Cyclic Web App URL: https://dark-gold-panda-cuff.cyclic.app/ 
 *
@@ -19,6 +19,7 @@ const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
 const streamifier = require("streamifier");
 const exphbs = require("express-handlebars");
+app.use(express.urlencoded({extended: true}));
 
 app.engine(
   ".hbs",
@@ -47,11 +48,17 @@ app.engine(
           return options.fn(this);
         }
       },
+      formatDate: function(dateObj){
+        let year = dateObj.getFullYear();
+        let month = (dateObj.getMonth() + 1).toString();
+        let day = dateObj.getDate().toString();
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2,'0')}`;
+      }    
     },
   })
 );
-app.set("view engine", ".hbs");
 
+app.set("view engine", ".hbs");
 // Cloudinary configuration
 cloudinary.config({
   cloud_name: "deppf2r3z",
@@ -199,7 +206,11 @@ app.get("/items", (req, res) => {
     storeService
       .getItemsByCategory(category)
       .then((filteredItems) => {
-        res.render("items", {posts: filteredItems})
+        if (filteredItems.length > 0) {
+          res.render("Items", {posts: filteredItems})
+        } else {
+          res.render('Items', { message: 'No results' });
+        }
       })
       .catch((err) => {
         res.render("items", {message: "no results"});
@@ -257,8 +268,63 @@ app.get("/categories", (req, res) => {
     });
 });
 
-app.get("/items/add", (req, res) => {
-  res.render("addItem");
+app.get('/items/add', (req, res) => {
+  storeService
+    .getCategories()
+    .then((categories) => {
+      res.render('addItem', { categories });
+    })
+    .catch(() => {
+      res.render('addItem', { categories: [] });
+    });
+});
+
+app.get('/categories/add', (req, res) => {
+  res.render('addCategory');
+});
+
+app.post('/categories/add', (req, res) => {
+  const categoryData = {
+    category: req.body.category,
+  };
+
+  storeService
+    .addCategory(categoryData)
+    .then(() => {
+      res.redirect('/categories');
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Unable to Add Category');
+    });
+});
+
+app.get('/categories/delete/:id', (req, res) => {
+  const categoryId = req.params.id;
+
+  storeService
+    .deleteCategoryById(categoryId)
+    .then(() => {
+      res.redirect('/categories');
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Unable to Remove Category / Category not found');
+    });
+});
+
+app.get('/items/delete/:id', (req, res) => {
+  const postId = req.params.id;
+
+  storeService
+    .deletePostById(postId)
+    .then(() => {
+      res.redirect('/items');
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Unable to Remove Post / Post not found');
+    });
 });
 
 //add new item

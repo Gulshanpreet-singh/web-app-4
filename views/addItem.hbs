@@ -5,12 +5,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
-            <input
-              class="form-control"
-              id="featureImage"
-              name="featureImage"
-              type="file"
-            />
+            <input class="form-control" id="featureImage" name="featureImage" type="file" />
           </div>
         </div>
       </div>
@@ -38,12 +33,7 @@
         <div class="col-md-12">
           <div class="form-group">
             <label for="body">Description:</label>
-            <textarea
-              class="form-control"
-              id="body"
-              name="body"
-              rows="15"
-            ></textarea>
+            <textarea class="form-control" id="body" name="body" rows="15"></textarea>
           </div>
         </div>
       </div>
@@ -51,13 +41,16 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="category">Category:</label>
-            <select class="form-control" name="category" id="category">
-              <option value="1">Home, Garden</option>
-              <option value="2">Electronics, Computers, Video Games</option>
-              <option value="3">Clothing</option>
-              <option value="4">Sports & Outdoors</option>
-              <option value="5">Pets</option>
-            </select>
+              {{#if categories}}
+              <select class="form-control" name="category" id="category">
+                <option value="">Select Category</option>
+                {{#each categories}}
+                <option value="{{id}}">{{category}}</option>
+                {{/each}}
+              </select>
+              {{else}}
+              <div>No Categories</div>
+              {{/if}}
           </div>
         </div>
         <div class="col-md-6">
@@ -74,10 +67,6 @@
       </div>
     </fieldset>
     <hr />
-    <input
-      type="submit"
-      class="btn btn-primary pull-right"
-      value="Add Post"
-    /><br /><br /><br />
+    <input type="submit" class="btn btn-primary pull-right" value="Add Post" /><br /><br /><br />
   </form>
 </div>
