@@ -5,7 +5,7 @@ I declare that this assignment is my own work in accordance with Seneca  Academi
 
 *  Name: Gulshanpreet singh Student ID: 168457216 Date: 11th August, 2023
 *
-*  Cyclic Web App URL: https://dark-gold-panda-cuff.cyclic.app/ 
+*  Cyclic Web App URL: https://adventurous-ox-sundress.cyclic.app/shop
 *
 *  GitHub Repository URL:  https://github.com/Gulshanpreet-singh/hello-world 
 *
